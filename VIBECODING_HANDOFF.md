@@ -953,3 +953,12 @@ After the underlying executable change has already passed required local validat
 A version/build bump, packaging step, signing step, generated appcast/feed change, or final Release-configuration build does **not** by itself require another manual user approval if the executable behavior being released already passed local validation.
 
 Stop only for a genuine blocker, a failed validation that requires an executable behavior change, or an authorization/credential action that only the user can perform. If release preparation introduces a new executable or build-affecting behavior change beyond what was already validated, the local validation gate reopens before publication.
+
+
+## Automatic handoff synchronization (2026-10-19)
+
+- The tracked `.githooks/pre-commit` runs `tools/vibe_handoff.py sync-staged` locally. It reads version/build from the Git index, reads the GitHub published release, refreshes only the bounded generated current-state section and stages the handoff in the same commit. It does **not** modify application code or establish build/manual-test validation.
+- On a fresh Mac checkout, run `sh .githooks/install.sh` once. It refuses to replace an existing pre-commit hook. Do not bypass hooks with `--no-verify`. Changes to feature behavior, debugging decisions, known issues, manual validation, and next work still require a human-maintained narrative entry after the exact local test passes.
+- Do not commit or push any executable change before successful validation in the real Mac checkout. The tool makes documentation updates only; GitHub Actions remain manual only.
+- Sparkle applications' release scripts refresh generated release facts in source and update-feed handoffs once their respective release milestones are reached. Verify the live release/feed before claiming publication succeeded. Projects without a scripted release must refresh and commit the handoff after externally verifying publication.
+- If GitHub release status cannot be verified, or the handoff contains unstaged edits, the hook blocks rather than guessing or overwriting your changes.
