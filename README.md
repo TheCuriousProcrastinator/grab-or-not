@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="icons/icon128.png" width="96" alt="ClipNest icon">
+  <img src="icons/icon128.png" width="96" alt="Grab-Or-Not icon">
 </p>
 
-# ClipNest
+# Grab-Or-Not
 
 **Web Clipper for Obsidian & Notion**
 
@@ -48,13 +48,13 @@ Captured images can be included with clips while preserving the rest of your cli
 
 ## Notion
 
-ClipNest can save directly into Notion pages and databases using your existing logged-in Notion browser session.
+Grab-Or-Not can save directly into Notion pages and databases using your existing logged-in Notion browser session.
 
 Notion features include:
 
 - reusable presets
 - database and page destinations
-- custom ClipNest preset icons
+- custom Grab-Or-Not preset icons
 - title and source URL mapping
 - custom database field mappings
 - Select and Status properties
@@ -73,7 +73,7 @@ Notion authentication stays local to each computer. Preset configuration can syn
 
 ## Quick Clip
 
-Select text and right-click **Clip selected text** to save without opening the normal ClipNest popup. Obsidian Quick Clips open the saved note immediately.
+Select text and right-click **Clip selected text** to save without opening the normal Grab-Or-Not popup. Obsidian Quick Clips open the saved note immediately.
 
 Quick Clip can use its own dedicated Notion preset or your configured Obsidian destination.
 
@@ -152,19 +152,19 @@ to save.
 
 ### Chrome Web Store
 
-Install ClipNest from the [Chrome Web Store](https://chromewebstore.google.com/detail/clipnest/bjcapemjamlbdnicmljahhjbakingmln).
+Install Grab-Or-Not from the [Chrome Web Store](https://chromewebstore.google.com/detail/clipnest/bjcapemjamlbdnicmljahhjbakingmln).
 
 ### Manual installation
 
 You can also install a packaged GitHub release manually:
 
-1. Open the [ClipNest Releases](https://github.com/TheCuriousProcrastinator/clipnest/releases) page.
-2. Download the named `clipnest-x.y.z.zip` release asset.
+1. Open the [Grab-Or-Not Releases](https://github.com/TheCuriousProcrastinator/clipnest/releases) page.
+2. Download the named `grab-or-not-x.y.z.zip` release asset.
 3. Unzip it.
 4. Open `chrome://extensions`.
 5. Enable **Developer mode**.
 6. Click **Load unpacked**.
-7. Select the unzipped ClipNest folder.
+7. Select the unzipped Grab-Or-Not folder.
 
 Use the named release asset rather than GitHub's automatically generated Source code ZIP.
 
@@ -174,23 +174,23 @@ Notion preset configuration can sync between Chrome installations signed into th
 
 Notion login sessions and Obsidian vault access do not sync.
 
-Portable ClipNest settings can also be exported and imported from the Settings page.
+Portable Grab-Or-Not settings can also be exported and imported from the Settings page.
 
 ## Privacy
 
-ClipNest does not operate a backend service that receives clipped webpage content.
+Grab-Or-Not does not operate a backend service that receives clipped webpage content.
 
 Obsidian clips are written locally through Chrome's File System Access API.
 
-When saving to Notion, ClipNest communicates directly with Notion using the browser session already logged into Notion.
+When saving to Notion, Grab-Or-Not communicates directly with Notion using the browser session already logged into Notion.
 
-Notion login sessions and Obsidian vault permissions are not included in settings exports or ClipNest sync.
+Notion login sessions and Obsidian vault permissions are not included in settings exports or Grab-Or-Not sync.
 
 See the full [Privacy Policy](https://thecuriousprocrastinator.github.io/clipnest/privacy.html).
 
 ## Development
 
-Development-only diagnostics live under `tools/dev/` and are not included in packaged ClipNest releases.
+Development-only diagnostics live under `tools/dev/` and are not included in packaged Grab-Or-Not releases.
 
 ## Links
 

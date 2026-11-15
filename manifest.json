@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "ClipNest",
-  "version": "2.0.90",
+  "name": "Grab-Or-Not",
+  "version": "2.0.93",
   "description": "Web Clipper for Obsidian & Notion",
   "minimum_chrome_version": "122",
   "permissions": [
@@ -31,7 +31,7 @@
         "default": "Alt+Shift+E",
         "mac": "Option+Shift+E"
       },
-      "description": "Open ClipNest"
+      "description": "Open Grab-Or-Not"
     }
   },
   "icons": {

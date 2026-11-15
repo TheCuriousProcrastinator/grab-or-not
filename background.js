@@ -21,7 +21,7 @@ try {
 
 
 /* ==================================================
-   ClipNest Quick Clip - V0.6.0
+   Grab-Or-Not Quick Clip - V0.6.0
    ================================================== */
 
 const QUICK_CLIP_TEXT_MENU_ID =
@@ -107,7 +107,7 @@ async function getQuickClipNotionPreset(
  * A context-menu Quick Clip runs in the background service
  * worker. If the remembered Obsidian vault currently needs
  * permission, preserve the original Quick Clip intent in
- * session storage and open ClipNest.
+ * session storage and open Grab-Or-Not.
  *
  * The popup can then request filesystem permission from a
  * real user click and ask the worker to retry the original
@@ -163,7 +163,7 @@ async function queueQuickClipAccessIntent(
 
   if (!Number.isInteger(tabId)) {
     throw new Error(
-      "ClipNest could not identify the page for Quick Clip."
+      "Grab-Or-Not could not identify the page for Quick Clip."
     );
   }
 
@@ -220,7 +220,7 @@ async function queueQuickClipAccessIntent(
         "function"
     ) {
       throw new Error(
-        "This Chrome build cannot open ClipNest automatically."
+        "This Chrome build cannot open Grab-Or-Not automatically."
       );
     }
 
@@ -492,7 +492,7 @@ async function quickClipSelectedText(
   if (!/^https?:/i.test(url)) {
     await showQuickClipToast(
       tab?.id,
-      "ClipNest only clips normal webpages.",
+      "Grab-Or-Not only clips normal webpages.",
       "error"
     );
 
@@ -596,7 +596,7 @@ async function quickClipSelectedText(
       if (!template) {
         throw new Error(
           "Your default Obsidian template could not " +
-          "be loaded. Open ClipNest once and try again."
+          "be loaded. Open Grab-Or-Not once and try again."
         );
       }
     }
@@ -653,7 +653,7 @@ async function quickClipSelectedText(
         );
       } catch (openError) {
         console.warn(
-          "ClipNest saved the Quick Clip but could not open it in Obsidian:",
+          "Grab-Or-Not saved the Quick Clip but could not open it in Obsidian:",
           openError
         );
 
@@ -691,7 +691,7 @@ async function quickClipSelectedText(
     );
   } catch (error) {
     console.error(
-      "ClipNest Quick Clip failed:",
+      "Grab-Or-Not Quick Clip failed:",
       error
     );
 
@@ -1103,7 +1103,7 @@ async function showQuickClipToast(
 
 
 /* ==================================================
-   ClipNest Quick Article - V0.6.4
+   Grab-Or-Not Quick Article - V0.6.4
    ================================================== */
 
 async function captureQuickArticlePage(
@@ -1249,7 +1249,7 @@ async function quickClipArticle(
   ) {
     await showQuickClipToast(
       tabId,
-      "ClipNest only clips normal webpages.",
+      "Grab-Or-Not only clips normal webpages.",
       "error"
     );
 
@@ -1303,7 +1303,7 @@ async function quickClipArticle(
 
     if (!articleMarkdown) {
       throw new Error(
-        "ClipNest could not find useful article content on this page."
+        "Grab-Or-Not could not find useful article content on this page."
       );
     }
 
@@ -1356,7 +1356,7 @@ async function quickClipArticle(
       if (!template) {
         throw new Error(
           "Your default Obsidian template could not " +
-          "be loaded. Open ClipNest once and try again."
+          "be loaded. Open Grab-Or-Not once and try again."
         );
       }
     }
@@ -1453,7 +1453,7 @@ async function quickClipArticle(
     );
   } catch (error) {
     console.error(
-      "ClipNest Quick Article failed:",
+      "Grab-Or-Not Quick Article failed:",
       error
     );
 
@@ -2305,7 +2305,7 @@ async function ensureNotionTagOptionsForSave(
 
   for (const option of missing) {
     console.log(
-      "ClipNest created Notion tag option:",
+      "Grab-Or-Not created Notion tag option:",
       {
         tag:
           option.value,
@@ -2387,7 +2387,7 @@ async function getNotionTagOptions() {
 
   if (!parentPageId) {
     throw new Error(
-      "ClipNest could not determine this Notion database's parent page."
+      "Grab-Or-Not could not determine this Notion database's parent page."
     );
   }
 
@@ -2597,7 +2597,7 @@ async function ensureNotionSelectOptionsForSave(
 
   if (!parentPageId) {
     throw new Error(
-      "ClipNest could not determine this Notion database's parent page."
+      "Grab-Or-Not could not determine this Notion database's parent page."
     );
   }
 
@@ -2733,7 +2733,7 @@ async function ensureNotionSelectOptionsForSave(
     );
 
     console.log(
-      "ClipNest created Notion select option:",
+      "Grab-Or-Not created Notion select option:",
       {
         property:
           property.name,
@@ -2865,7 +2865,7 @@ async function ensureNotionMultiSelectOptionsForSave(
 
   if (!parentPageId) {
     throw new Error(
-      "ClipNest could not determine the Notion database parent."
+      "Grab-Or-Not could not determine the Notion database parent."
     );
   }
 
@@ -3502,7 +3502,7 @@ async function saveToNotion(
       mediaBlockCount;
 
     console.log(
-      "ClipNest Notion save succeeded:",
+      "Grab-Or-Not Notion save succeeded:",
       {
         preset:
           preset.name,
@@ -3536,7 +3536,7 @@ async function saveToNotion(
     };
   } catch (error) {
     console.error(
-      "ClipNest created the Notion page but failed to append content:",
+      "Grab-Or-Not created the Notion page but failed to append content:",
       {
         pageId:
           page?.id,
@@ -3550,7 +3550,7 @@ async function saveToNotion(
 
     const wrapped =
       new Error(
-        "The Notion page was created, but ClipNest could not write its content. " +
+        "The Notion page was created, but Grab-Or-Not could not write its content. " +
         (
           error?.message ||
           String(error)
@@ -3800,7 +3800,7 @@ async function openQuickClipObsidianNote(
     );
   } catch (retryError) {
     console.debug(
-      "ClipNest Obsidian URI retry failed:",
+      "Grab-Or-Not Obsidian URI retry failed:",
       retryError
     );
   }
@@ -3827,7 +3827,7 @@ async function quickSaveToObsidian(
 
   if (permission !== "granted") {
     throw new Error(
-      "Quick Clip needs persistent vault access. Open ClipNest Settings, click Enable Quick Clip access, and choose Allow on every visit."
+      "Quick Clip needs persistent vault access. Open Grab-Or-Not Settings, click Enable Quick Clip access, and choose Allow on every visit."
     );
   }
 
@@ -5102,7 +5102,7 @@ function mergeQuickTemplateFrontmatter(
 
 
 /* ==================================================
-   ClipNest page image picker
+   Grab-Or-Not page image picker
    ================================================== */
 
 chrome.runtime.onMessage.addListener(
@@ -5203,7 +5203,7 @@ chrome.runtime.onMessage.addListener(
                 ) <= 0
               ) {
                 throw new Error(
-                  "ClipNest could not capture the selected image."
+                  "Grab-Or-Not could not capture the selected image."
                 );
               }
 
@@ -5233,7 +5233,7 @@ chrome.runtime.onMessage.addListener(
 
               if (!dataUrl) {
                 throw new Error(
-                  "ClipNest could not capture the selected image."
+                  "Grab-Or-Not could not capture the selected image."
                 );
               }
 
@@ -5268,7 +5268,7 @@ chrome.runtime.onMessage.addListener(
               }
 
               console.debug(
-                "ClipNest could not capture a local property-image preview:",
+                "Grab-Or-Not could not capture a local property-image preview:",
                 error
               );
             }
@@ -5289,7 +5289,7 @@ chrome.runtime.onMessage.addListener(
            * reopen its action popup. If Chrome
            * refuses for any reason, the selected
            * image remains stored and will appear
-           * the next time the user opens ClipNest.
+           * the next time the user opens Grab-Or-Not.
            */
           try {
             if (
@@ -5317,7 +5317,7 @@ chrome.runtime.onMessage.addListener(
             popupError
           ) {
             console.debug(
-              "ClipNest could not automatically reopen the popup:",
+              "Grab-Or-Not could not automatically reopen the popup:",
               popupError
             );
           }
@@ -5346,7 +5346,7 @@ chrome.runtime.onMessage.addListener(
 
 
 /* ==================================================
-   ClipNest Obsidian note opener
+   Grab-Or-Not Obsidian note opener
    ================================================== */
 
 chrome.runtime.onMessage.addListener(
@@ -5450,7 +5450,7 @@ chrome.runtime.onMessage.addListener(
             );
           } catch (retryError) {
             console.debug(
-              "ClipNest Obsidian URI retry failed:",
+              "Grab-Or-Not Obsidian URI retry failed:",
               retryError
             );
           }
@@ -5519,7 +5519,7 @@ async function processPendingBodyAreaCapture(
         });
       } catch (error) {
         console.warn(
-          "ClipNest could not reopen popup after area capture:",
+          "Grab-Or-Not could not reopen popup after area capture:",
           error
         );
       }
@@ -5535,7 +5535,7 @@ async function processPendingBodyAreaCapture(
       )
     ) {
       throw new Error(
-        "ClipNest lost the page context for this capture."
+        "Grab-Or-Not lost the page context for this capture."
       );
     }
 
@@ -5550,7 +5550,7 @@ async function processPendingBodyAreaCapture(
         windowId
     ) {
       throw new Error(
-        "The page changed before ClipNest could capture the selected area."
+        "The page changed before Grab-Or-Not could capture the selected area."
       );
     }
 
@@ -5561,7 +5561,7 @@ async function processPendingBodyAreaCapture(
         pending.pageUrl
     ) {
       throw new Error(
-        "The page changed before ClipNest could capture the selected area."
+        "The page changed before Grab-Or-Not could capture the selected area."
       );
     }
 
@@ -5632,7 +5632,7 @@ async function processPendingBodyAreaCapture(
     await reopenPopup();
   } catch (error) {
     console.error(
-      "ClipNest area capture failed:",
+      "Grab-Or-Not area capture failed:",
       error
     );
 
@@ -5685,7 +5685,7 @@ chrome.runtime.onMessage.addListener(
       .catch(
         (error) => {
           console.error(
-            "ClipNest area runtime handoff failed:",
+            "Grab-Or-Not area runtime handoff failed:",
             error
           );
 

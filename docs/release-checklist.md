@@ -1,6 +1,6 @@
-# ClipNest Release Checklist
+# Grab-Or-Not Release Checklist
 
-Use this before publishing a new ClipNest release.
+Use this before publishing a new Grab-Or-Not release.
 
 ## 1. Repository state
 
@@ -77,7 +77,7 @@ Use this before publishing a new ClipNest release.
 - [ ] Commit final release changes
 - [ ] Push `main`
 - [ ] Create matching `vX.Y.Z` tag/release
-- [ ] Upload `clipnest-X.Y.Z.zip` as a release asset
+- [ ] Upload `grab-or-not-X.Y.Z.zip` as a release asset
 - [ ] Confirm the release asset is downloadable
 - [ ] Confirm release notes describe the user-visible changes
 

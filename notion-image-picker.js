@@ -703,7 +703,7 @@
           error
         ) {
           console.warn(
-            "ClipNest could not scan page images:",
+            "Grab-Or-Not could not scan page images:",
             error
           );
 
@@ -1125,7 +1125,7 @@
       error
     ) {
       console.warn(
-        "ClipNest could not create a local image preview:",
+        "Grab-Or-Not could not create a local image preview:",
         error
       );
 
@@ -1335,7 +1335,7 @@
       );
     } catch (error) {
       console.debug(
-        "ClipNest could not crop the stored property-image preview:",
+        "Grab-Or-Not could not crop the stored property-image preview:",
         error
       );
 

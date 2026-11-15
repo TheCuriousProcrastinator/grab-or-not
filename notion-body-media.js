@@ -995,7 +995,7 @@
 
     if (!item) {
       throw new Error(
-        "ClipNest could not use that image."
+        "Grab-Or-Not could not use that image."
       );
     }
 
@@ -3150,7 +3150,7 @@ ${scroller}::-webkit-scrollbar-thumb:vertical {
             };
 
             /*
-             * Remove ClipNest's capture UI before the
+             * Remove Grab-Or-Not's capture UI before the
              * browser takes the screenshot, then wait
              * for Chrome to composite a clean frame.
              */
@@ -3189,7 +3189,7 @@ ${scroller}::-webkit-scrollbar-thumb:vertical {
               .catch(
                 (error) =>
                   console.error(
-                    "ClipNest area handoff failed:",
+                    "Grab-Or-Not area handoff failed:",
                     error
                   )
               );

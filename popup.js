@@ -1241,7 +1241,7 @@ async function init() {
    * ROUTE-FIRST NOTION STARTUP - 1.9.10
    *
    * A pending Notion clip should not wait for article
-   * extraction before ClipNest knows which screen to show.
+   * extraction before Grab-Or-Not knows which screen to show.
    *
    * First use the active tab URL plus locally persisted
    * draft/resume state to resolve the preset. Only after
@@ -1477,7 +1477,7 @@ async function init() {
       }
     } catch (error) {
       console.warn(
-        "ClipNest could not resolve the pending Notion route early:",
+        "Grab-Or-Not could not resolve the pending Notion route early:",
         error
       );
     }
@@ -1567,7 +1567,7 @@ async function init() {
               true;
           } catch (error) {
             console.warn(
-              "ClipNest could not reopen pending Notion preset:",
+              "Grab-Or-Not could not reopen pending Notion preset:",
               error
             );
           }
@@ -1736,7 +1736,7 @@ async function restorePickedPageImage() {
 
       /*
        * Distinguish an image the user explicitly
-       * selected from the image ClipNest merely
+       * selected from the image Grab-Or-Not merely
        * detected on the page.
        */
       state.capture.imageExplicit =
@@ -1748,7 +1748,7 @@ async function restorePickedPageImage() {
     );
   } catch (error) {
     console.warn(
-      "ClipNest could not restore the selected page image:",
+      "Grab-Or-Not could not restore the selected page image:",
       error
     );
   }
@@ -1966,7 +1966,7 @@ function createNotionConnectionGate() {
     </h2>
 
     <p id="notionConnectionGateMessage">
-      ClipNest uses the Notion account already signed in to this browser.
+      Grab-Or-Not uses the Notion account already signed in to this browser.
     </p>
 
     <div class="notion-connection-actions">
@@ -2169,7 +2169,7 @@ function showNotionConnectionGate(
       "Connect Notion";
 
     message.textContent =
-      "ClipNest uses the Notion account already signed in to this browser.";
+      "Grab-Or-Not uses the Notion account already signed in to this browser.";
 
     note.textContent =
       "No API key or integration required.";
@@ -2603,7 +2603,7 @@ function setupNotionPresetNavigation() {
     !notionClipRangeNodes.length
   ) {
     console.warn(
-      "ClipNest could not determine the Notion clip UI range."
+      "Grab-Or-Not could not determine the Notion clip UI range."
     );
 
     return;
@@ -4065,7 +4065,7 @@ async function duplicateNotionPresetFromChooser(
 
   if (!duplicateStored) {
     throw new Error(
-      "ClipNest created the copy but could not find it."
+      "Grab-Or-Not created the copy but could not find it."
     );
   }
 
@@ -4149,7 +4149,7 @@ async function deleteNotionPresetFromChooser(
 
   const confirmed =
     window.confirm(
-      `Remove "${name}" from ClipNest?\n\n` +
+      `Remove "${name}" from Grab-Or-Not?\n\n` +
       "Nothing will be removed from Notion."
     );
 
@@ -8106,7 +8106,7 @@ function notionBuilderFieldIsConfigurable(
  * CLIP FORM VISIBILITY MODEL - 2.0.62
  *
  * A field being configured in the preset determines whether
- * ClipNest saves it.
+ * Grab-Or-Not saves it.
  *
  * showInClipForm determines only whether the user sees an
  * interactive control while clipping.
@@ -10755,7 +10755,7 @@ async function showNotionPresetChooser() {
    * Build the complete chooser BEFORE changing the visible
    * route.
    *
-   * Previously ClipNest exposed the empty chooser shell and
+   * Previously Grab-Or-Not exposed the empty chooser shell and
    * only then awaited listPresets(). Chrome therefore saw one
    * popup height for the shell and another after preset cards
    * were inserted.
@@ -10827,7 +10827,7 @@ function ensureNotionDynamicFieldsHost() {
     !notionTagsFieldNode
   ) {
     console.warn(
-      "ClipNest could not locate the shared Title/Tags fields."
+      "Grab-Or-Not could not locate the shared Title/Tags fields."
     );
 
     return false;
@@ -10844,7 +10844,7 @@ function ensureNotionDynamicFieldsHost() {
         parent
   ) {
     console.warn(
-      "ClipNest expected Title and Tags to share a parent."
+      "Grab-Or-Not expected Title and Tags to share a parent."
     );
 
     return false;
@@ -15268,7 +15268,7 @@ async function ensureSelectedObsidianTemplateAvailable() {
 
   if (!refreshed) {
     throw new Error(
-      "ClipNest could not verify the selected Obsidian template. Try again or choose None."
+      "Grab-Or-Not could not verify the selected Obsidian template. Try again or choose None."
     );
   }
 
@@ -15386,7 +15386,7 @@ async function save() {
     /*
      * Notion keeps its existing privacy behavior:
      * once Save is pressed, the payload keeps its own
-     * copy and ClipNest clears the temporary draft.
+     * copy and Grab-Or-Not clears the temporary draft.
      *
      * Obsidian is different because Chrome may interrupt
      * the save to request vault permission. Keep Obsidian
@@ -15529,7 +15529,7 @@ async function save() {
         ) {
           /*
            * Preserve the current form for the next popup open.
-           * This reuses ClipNest's existing one-time full-form
+           * This reuses Grab-Or-Not's existing one-time full-form
            * resume mechanism rather than creating parallel
            * persistence.
            */
@@ -15671,7 +15671,7 @@ ${articleMarkdown}`
       !selectedMedia.length
     ) {
       throw new Error(
-        "The selected content is no longer available. Select it again and reopen ClipNest."
+        "The selected content is no longer available. Select it again and reopen Grab-Or-Not."
       );
     }
 
@@ -19609,7 +19609,7 @@ async function obsidianMediaBlob(
       return blob;
     } catch (error) {
       throw new Error(
-        "ClipNest could not copy the selected page image into Obsidian. Try one of the screenshot capture options instead. " +
+        "Grab-Or-Not could not copy the selected page image into Obsidian. Try one of the screenshot capture options instead. " +
         (
           error?.message ||
           String(error)
@@ -19619,7 +19619,7 @@ async function obsidianMediaBlob(
   }
 
   throw new Error(
-    "ClipNest could not read the captured image."
+    "Grab-Or-Not could not read the captured image."
   );
 }
 
@@ -19854,7 +19854,7 @@ async function saveToObsidian(
       );
     } catch (error) {
       console.warn(
-        "ClipNest saved the note but could not open it in Obsidian:",
+        "Grab-Or-Not saved the note but could not open it in Obsidian:",
         error
       );
     }
@@ -19958,7 +19958,7 @@ async function openSavedObsidianNote(
   if (!response?.ok) {
     throw new Error(
       response?.error?.message ||
-      "ClipNest could not open the saved Obsidian note."
+      "Grab-Or-Not could not open the saved Obsidian note."
     );
   }
 }

@@ -2205,7 +2205,7 @@
 
     const error =
       new Error(
-        "ClipNest could not read this Notion database schema."
+        "Grab-Or-Not could not read this Notion database schema."
       );
 
     error.attempts =
@@ -3111,7 +3111,7 @@ function encodeDatabaseProperties({
 
     const error =
       new Error(
-        "ClipNest could not write to this Notion workspace."
+        "Grab-Or-Not could not write to this Notion workspace."
       );
 
     error.attempts =
@@ -4075,7 +4075,7 @@ function encodeDatabaseProperties({
 
     if (!activeUserId) {
       throw new Error(
-        "ClipNest could not determine the Notion user for this workspace."
+        "Grab-Or-Not could not determine the Notion user for this workspace."
       );
     }
 
@@ -4275,7 +4275,7 @@ function encodeDatabaseProperties({
 
     const error =
       new Error(
-        "ClipNest could not search this Notion workspace."
+        "Grab-Or-Not could not search this Notion workspace."
       );
 
     error.attempts =
@@ -4302,7 +4302,7 @@ function encodeDatabaseProperties({
 
     if (!granted) {
       throw new Error(
-        "ClipNest does not have permission to access Notion websites."
+        "Grab-Or-Not does not have permission to access Notion websites."
       );
     }
 
@@ -4579,7 +4579,7 @@ function encodeDatabaseProperties({
 
     const error =
       new Error(
-        "ClipNest could not start the Notion image upload."
+        "Grab-Or-Not could not start the Notion image upload."
       );
 
     error.attempts =
@@ -5172,7 +5172,7 @@ function encodeDatabaseProperties({
      * Never treat a no-cors upload as success.
      *
      * An opaque response cannot tell us whether S3
-     * accepted the file. That caused ClipNest to
+     * accepted the file. That caused Grab-Or-Not to
      * continue saving even when the screenshot was
      * never actually uploaded.
      *
@@ -5181,7 +5181,7 @@ function encodeDatabaseProperties({
      */
     const error =
       new Error(
-        "ClipNest could not upload the screenshot to Notion."
+        "Grab-Or-Not could not upload the screenshot to Notion."
       );
 
     error.directError =

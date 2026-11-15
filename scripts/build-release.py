@@ -106,7 +106,7 @@ def validate_manifest() -> str:
     if manifest.get("manifest_version") != 3:
         fail("Expected Manifest V3.")
 
-    if manifest.get("name") != "ClipNest":
+    if manifest.get("name") != "Grab-Or-Not":
         fail("Unexpected extension name.")
 
     version = str(
@@ -163,7 +163,7 @@ def build_zip(
 
     destination = (
         DIST /
-        f"clipnest-{version}.zip"
+        f"grab-or-not-{version}.zip"
     )
 
     if destination.exists():
@@ -274,7 +274,7 @@ def main() -> None:
     )
 
     print("")
-    print("ClipNest release package ready")
+    print("Grab-Or-Not release package ready")
     print(f"Version: {version}")
     print(f"Files:   {len(files)}")
     print(f"ZIP:     {archive}")

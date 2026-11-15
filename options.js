@@ -360,8 +360,8 @@ function setNotionDisconnectAvailability(
 async function disconnectNotion() {
   const confirmed =
     window.confirm(
-      "Disconnect Notion from ClipNest?\n\n" +
-      "This removes ClipNest's permission to access Notion websites. " +
+      "Disconnect Notion from Grab-Or-Not?\n\n" +
+      "This removes Grab-Or-Not's permission to access Notion websites. " +
       "Your presets will stay saved and you will remain signed in to Notion."
     );
 
@@ -382,7 +382,7 @@ async function disconnectNotion() {
 
     if (stillConnected) {
       throw new Error(
-        "Chrome did not remove ClipNest's Notion permission."
+        "Chrome did not remove Grab-Or-Not's Notion permission."
       );
     }
 
@@ -983,7 +983,7 @@ function validateSettingsBackup(
     )
   ) {
     throw new Error(
-      "This is not a valid ClipNest settings file."
+      "This is not a valid Grab-Or-Not settings file."
     );
   }
 
@@ -992,7 +992,7 @@ function validateSettingsBackup(
       SETTINGS_EXPORT_FORMAT
   ) {
     throw new Error(
-      "This file is not a ClipNest settings backup."
+      "This file is not a Grab-Or-Not settings backup."
     );
   }
 
@@ -1003,7 +1003,7 @@ function validateSettingsBackup(
       SETTINGS_EXPORT_VERSION
   ) {
     throw new Error(
-      "This ClipNest settings backup version is not supported."
+      "This Grab-Or-Not settings backup version is not supported."
     );
   }
 
@@ -1019,7 +1019,7 @@ function validateSettingsBackup(
     )
   ) {
     throw new Error(
-      "The ClipNest settings backup is incomplete."
+      "The Grab-Or-Not settings backup is incomplete."
     );
   }
 
@@ -1192,7 +1192,7 @@ function validateSettingsBackup(
     theme !== rawTheme
   ) {
     throw new Error(
-      "The backup has an invalid ClipNest theme."
+      "The backup has an invalid Grab-Or-Not theme."
     );
   }
 
@@ -1252,7 +1252,7 @@ async function importSettingsBackup() {
 
     const confirmed =
       window.confirm(
-        "Import this ClipNest backup?\n\n" +
+        "Import this Grab-Or-Not backup?\n\n" +
         "This will replace your current Notion presets and update Chrome Sync. " +
         "Obsidian vaults and your Notion login will not be changed."
       );
@@ -2745,7 +2745,7 @@ function makeNotionSchemaFieldRow(
       "Enter text while clipping.";
   } else {
     description.textContent =
-      "This property type is not supported by ClipNest yet.";
+      "This property type is not supported by Grab-Or-Not yet.";
   }
 
   copy.append(
@@ -4123,7 +4123,7 @@ async function loadNotionDatabaseSchemaForPreset(
 
   if (!parentPageId) {
     throw new Error(
-      "ClipNest could not determine this database's parent page."
+      "Grab-Or-Not could not determine this database's parent page."
     );
   }
 
@@ -4396,13 +4396,13 @@ async function refreshNotionWorkspacePicker({
         "Notion browser access not enabled";
 
       els.notionConnectionStatus.textContent =
-        "Click Connect Notion to allow ClipNest to use your existing Notion browser session.";
+        "Click Connect Notion to allow Grab-Or-Not to use your existing Notion browser session.";
 
       els.refreshNotionWorkspaces.textContent =
         "Connect Notion";
 
       els.notionWorkspaceHelp.textContent =
-        "ClipNest only asks Chrome for access to Notion websites.";
+        "Grab-Or-Not only asks Chrome for access to Notion websites.";
 
       els.notionWorkspacePickerButton.disabled =
         true;
@@ -4557,13 +4557,13 @@ async function refreshNotionWorkspacePicker({
         "Notion not connected";
 
       els.notionConnectionStatus.textContent =
-        "Sign in to Notion in Chrome to connect ClipNest.";
+        "Sign in to Notion in Chrome to connect Grab-Or-Not.";
 
       els.refreshNotionWorkspaces.textContent =
         "Sign in to Notion";
 
       els.notionWorkspaceHelp.textContent =
-        "ClipNest will check again when you return.";
+        "Grab-Or-Not will check again when you return.";
     } else {
       els.notionConnectionTitle.textContent =
         "Notion connection unavailable";
@@ -5123,7 +5123,7 @@ async function handleNotionDataSourceChange() {
     );
 
     els.notionDataSourceHelp.textContent =
-      "Page selected. ClipNest will create a child page beneath it.";
+      "Page selected. Grab-Or-Not will create a child page beneath it.";
   }
 
   showStatus(
@@ -5268,7 +5268,7 @@ async function handleNotionOptionsIntent() {
       if (!presetId) {
         showStatus(
           els.notionStatus,
-          "ClipNest could not determine which preset to edit.",
+          "Grab-Or-Not could not determine which preset to edit.",
           "error"
         );
 
@@ -5440,7 +5440,7 @@ async function removeNotionPreset() {
 
   const confirmed =
     window.confirm(
-      `Remove "${preset.name}" from ClipNest?\n\n` +
+      `Remove "${preset.name}" from Grab-Or-Not?\n\n` +
       "Nothing will be removed from Notion."
     );
 
@@ -5622,7 +5622,7 @@ async function preparePendingQuickClipAccessInSettings() {
  * "Allow on every visit".
  *
  * queryPermission() reports "granted" for both an active
- * grant and an extended grant, so ClipNest must not claim
+ * grant and an extended grant, so Grab-Or-Not must not claim
  * that "granted" alone proves persistence.
  */
 
@@ -5687,7 +5687,7 @@ async function enableQuickClipAccess() {
       if (pendingIntent) {
         showStatus(
           els.obsidianStatus,
-          "Chrome currently reports vault access as granted, so it cannot show the persistent-access choice right now. Close ClipNest Settings, wait a few seconds, and try Quick Clip again.",
+          "Chrome currently reports vault access as granted, so it cannot show the persistent-access choice right now. Close Grab-Or-Not Settings, wait a few seconds, and try Quick Clip again.",
           "error"
         );
 
@@ -5729,7 +5729,7 @@ async function enableQuickClipAccess() {
     if (!pendingIntent) {
       showStatus(
         els.obsidianStatus,
-        "Vault access granted. If you chose Allow on every visit, Quick Clip will keep working when ClipNest is closed and after Chrome restarts.",
+        "Vault access granted. If you chose Allow on every visit, Quick Clip will keep working when Grab-Or-Not is closed and after Chrome restarts.",
         "success"
       );
 
@@ -5751,7 +5751,7 @@ async function enableQuickClipAccess() {
     if (!response?.ok) {
       throw new Error(
         response?.error?.message ||
-        "ClipNest could not finish the pending Quick Clip."
+        "Grab-Or-Not could not finish the pending Quick Clip."
       );
     }
 
@@ -5852,8 +5852,8 @@ async function disconnectVault() {
 
   const confirmed =
     window.confirm(
-      `Remove "${vault.name}" from ClipNest?\n\n` +
-      "This only removes ClipNest's connection. " +
+      `Remove "${vault.name}" from Grab-Or-Not?\n\n` +
+      "This only removes Grab-Or-Not's connection. " +
       "No files in the Obsidian vault will be deleted."
     );
 
@@ -5869,7 +5869,7 @@ async function disconnectVault() {
 
   showStatus(
     els.obsidianStatus,
-    `${vault.name} removed from ClipNest.`,
+    `${vault.name} removed from Grab-Or-Not.`,
     "success"
   );
 }

@@ -3,7 +3,7 @@
 
 - Repository: `TheCuriousProcrastinator/clipnest`; local working branch: `main`.
 - Version data below is read from the **Git index** (the files staged for commit).
-- Source `manifest.json`: version `2.0.90`.
+- Source `manifest.json`: version `2.0.93`.
 - GitHub publication: Published GitHub release `v2.0.84` (reported by GitHub API). Other distribution channels are **unverified**.
 - This section does **not** establish local build success, manual QA, App Store/Chrome Web Store approval, notarization, live website deployment, or release-asset integrity.
 - The narrative below maintains architecture, decisions, issues and test evidence. Its older status and version claims are **historical** unless explicitly reconciled with this section.
@@ -287,6 +287,26 @@ Do not make a production release before successful browser testing unless explic
 ### Documentation
 
 - `README.md`
+
+## 2.0.93 validated development state: Grab-Or-Not
+
+Validated locally on November 14, 2026.
+
+- Product renamed from ClipNest to Grab-Or-Not.
+- Development version: 2.0.93.
+- Chrome extension ID remains bjcapemjamlbdnicmljahhjbakingmln.
+- Original ClipNest icon restored and retained.
+- Existing extension key, permissions, storage identifiers, presets, and integrations preserved.
+- User-visible branding updated in the extension, documentation, and release packaging.
+- Local project root: /Users/alex/Documents/Vibe Coding/Grab-Or-Not
+- Previous checkout path retained as a compatibility symlink.
+- Local package validation succeeded.
+- Manual Chrome validation: PASS, confirmed by user.
+- GitHub repository remains TheCuriousProcrastinator/clipnest.
+- Latest published GitHub release remains v2.0.84.
+- Chrome Web Store publication has not been performed.
+- GitHub Actions remain manual workflow_dispatch only.
+- Follow-up: GitHub repository rename, public URL review, and Chrome Web Store listing update.
 
 ## 2.0.90 validated development state: Notion workspace menu theming
 

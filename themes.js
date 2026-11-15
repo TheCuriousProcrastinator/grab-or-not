@@ -172,7 +172,7 @@
       );
     } catch (error) {
       console.warn(
-        "ClipNest could not load the theme:",
+        "Grab-Or-Not could not load the theme:",
         error
       );
 

@@ -1,5 +1,5 @@
 /*
- * ClipNest Notion Presets
+ * Grab-Or-Not Notion Presets
  *
  * A Preset now owns its Notion workspace context.
  *
@@ -799,7 +799,7 @@
         best === start
       ) {
         throw new Error(
-          "ClipNest could not create a safe Notion sync chunk."
+          "Grab-Or-Not could not create a safe Notion sync chunk."
         );
       }
 
@@ -850,7 +850,7 @@
           SYNC_PAYLOAD_VERSION
       ) {
         console.warn(
-          "ClipNest found invalid Notion sync metadata."
+          "Grab-Or-Not found invalid Notion sync metadata."
         );
 
         return {
@@ -875,7 +875,7 @@
         chunkCount > 500
       ) {
         console.warn(
-          "ClipNest found an invalid Notion sync chunk count."
+          "Grab-Or-Not found an invalid Notion sync chunk count."
         );
 
         return {
@@ -914,7 +914,7 @@
 
       if (incomplete) {
         console.warn(
-          "ClipNest Notion sync is waiting for remaining chunks."
+          "Grab-Or-Not Notion sync is waiting for remaining chunks."
         );
 
         return {
@@ -964,7 +964,7 @@
         )
       ) {
         console.warn(
-          "ClipNest found invalid synced Notion preset data."
+          "Grab-Or-Not found invalid synced Notion preset data."
         );
 
         return {
@@ -1004,7 +1004,7 @@
       };
     } catch (error) {
       console.warn(
-        "ClipNest could not read synced Notion presets:",
+        "Grab-Or-Not could not read synced Notion presets:",
         error
       );
 
@@ -1112,7 +1112,7 @@
       return true;
     } catch (error) {
       console.warn(
-        "ClipNest could not sync Notion presets:",
+        "Grab-Or-Not could not sync Notion presets:",
         error
       );
 
