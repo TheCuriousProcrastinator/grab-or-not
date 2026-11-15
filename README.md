@@ -158,7 +158,7 @@ Install Grab-Or-Not from the [Chrome Web Store](https://chromewebstore.google.co
 
 You can also install a packaged GitHub release manually:
 
-1. Open the [Grab-Or-Not Releases](https://github.com/TheCuriousProcrastinator/clipnest/releases) page.
+1. Open the [Grab-Or-Not Releases](https://github.com/TheCuriousProcrastinator/grab-or-not/releases) page.
 2. Download the named `grab-or-not-x.y.z.zip` release asset.
 3. Unzip it.
 4. Open `chrome://extensions`.
@@ -186,7 +186,7 @@ When saving to Notion, Grab-Or-Not communicates directly with Notion using the b
 
 Notion login sessions and Obsidian vault permissions are not included in settings exports or Grab-Or-Not sync.
 
-See the full [Privacy Policy](https://thecuriousprocrastinator.github.io/clipnest/privacy.html).
+See the full [Privacy Policy](https://thecuriousprocrastinator.github.io/grab-or-not/privacy.html).
 
 ## Development
 
@@ -194,9 +194,9 @@ Development-only diagnostics live under `tools/dev/` and are not included in pac
 
 ## Links
 
-- [Latest releases](https://github.com/TheCuriousProcrastinator/clipnest/releases)
-- [Privacy Policy](https://thecuriousprocrastinator.github.io/clipnest/privacy.html)
-- [Support and issues](https://github.com/TheCuriousProcrastinator/clipnest/issues)
+- [Latest releases](https://github.com/TheCuriousProcrastinator/grab-or-not/releases)
+- [Privacy Policy](https://thecuriousprocrastinator.github.io/grab-or-not/privacy.html)
+- [Support and issues](https://github.com/TheCuriousProcrastinator/grab-or-not/issues)
 
 ## Status
 

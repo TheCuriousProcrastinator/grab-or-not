@@ -1,7 +1,7 @@
 <!-- VIBE-CURRENT-STATE:START -->
 ## Current repository facts (generated, authoritative only for the facts listed)
 
-- Repository: `TheCuriousProcrastinator/clipnest`; local working branch: `main`.
+- Repository: `TheCuriousProcrastinator/grab-or-not`; local working branch: `main`.
 - Version data below is read from the **Git index** (the files staged for commit).
 - Source `manifest.json`: version `2.0.93`.
 - GitHub publication: Published GitHub release `v2.0.84` (reported by GitHub API). Other distribution channels are **unverified**.
@@ -48,7 +48,7 @@
 
 ## Project
 
-**Name:** ClipNest
+**Name:** Grab-Or-Not
 
 **Purpose:** Chrome extension for clipping web content into Obsidian and Notion.
 
@@ -82,15 +82,15 @@ Current capabilities include:
 
 ## Repository and local paths
 
-- GitHub: `TheCuriousProcrastinator/clipnest`
+- GitHub: `TheCuriousProcrastinator/grab-or-not`
 - Repository visibility: **public**
 - Default branch: `main`
 - Active branch at handoff creation: `main`
 - Only branch present in GitHub at handoff creation: `main`
 - Code HEAD before this handoff-only commit: `b44906b6d79ecb2b41d0061114568bfa80c02974`
 - Code commit: `Release ClipNest 2.0.83`
-- Local project root: `/Users/alex/Documents/Vibe Coding/ClipNest/clipnest`
-- Canonical build directory: `/Users/alex/Documents/Vibe Coding/ClipNest/clipnest/dist`
+- Local project root: `/Users/alex/Documents/Vibe Coding/Grab-Or-Not`
+- Canonical build directory: `/Users/alex/Documents/Vibe Coding/Grab-Or-Not/dist`
 - Final delivery location for Chrome-extension release ZIPs: `/Users/alex/Downloads/`
 
 Always verify current GitHub HEAD before changing anything because this handoff commit advances `main`.
@@ -302,7 +302,7 @@ Validated locally on November 14, 2026.
 - Previous checkout path retained as a compatibility symlink.
 - Local package validation succeeded.
 - Manual Chrome validation: PASS, confirmed by user.
-- GitHub repository remains TheCuriousProcrastinator/clipnest.
+- GitHub repository renamed to TheCuriousProcrastinator/grab-or-not.
 - Latest published GitHub release remains v2.0.84.
 - Chrome Web Store publication has not been performed.
 - GitHub Actions remain manual workflow_dispatch only.
