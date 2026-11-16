@@ -323,6 +323,44 @@ let notionOpenPresetId =
 let notionPresetChooserRenderToken =
   0;
 
+let notionPresetUiRefresh = Promise.resolve();
+
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName !== "local" || !els.notionPresetSelect) {
+    return;
+  }
+
+  const changed = (entry) =>
+    entry &&
+    JSON.stringify(entry.oldValue) !==
+      JSON.stringify(entry.newValue);
+
+  if (
+    !changed(changes.notionPresets) &&
+    !changed(changes.notionActivePresetId)
+  ) {
+    return;
+  }
+
+  notionPresetUiRefresh = notionPresetUiRefresh
+    .catch(() => undefined)
+    .then(async () => {
+      if (!els.notionPresetSelect) return;
+
+      await loadNotionPresetPicker();
+
+      if (
+        notionPresetChooserEl &&
+        !notionPresetChooserEl.classList.contains("hidden")
+      ) {
+        await renderNotionPresetChooser();
+      }
+    })
+    .catch(error => {
+      console.warn("Could not refresh Notion presets:", error);
+    });
+});
+
 let notionDynamicFieldsHost =
   null;
 

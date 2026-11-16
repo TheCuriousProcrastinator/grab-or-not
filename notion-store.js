@@ -35,11 +35,27 @@
   const LOCAL_SYNC_META_KEY =
     "clipnestNotionLocalSyncMetaV1";
 
+  const SYNC_WARNING_KEY = "clipnestNotionSyncWarningV1";
+
+  async function setSyncWarning(message) {
+    try {
+      if (message) {
+        await chrome.storage.local.set({ [SYNC_WARNING_KEY]: message });
+      } else {
+        await chrome.storage.local.remove(SYNC_WARNING_KEY);
+      }
+    } catch (error) {
+      console.warn("Notion sync warning storage failed:", error);
+    }
+  }
+
   let syncHydrationPromise =
     null;
 
   let syncListenerInstalled =
     false;
+
+  let syncWriteDepth = 0;
 
   function createId() {
     if (
@@ -679,8 +695,8 @@
   function buildSyncPayload(
     presets,
     activePresetId,
-    updatedAt =
-      Date.now()
+    updatedAt = Date.now(),
+    isReset = false
   ) {
     const timestamp =
       Math.max(
@@ -698,6 +714,8 @@
 
       updatedAt:
         timestamp,
+
+      reset: isReset === true,
 
       presets:
         normalizePresets(
@@ -819,6 +837,16 @@
     return chunks;
   }
 
+  async function snapshotHash(serialized) {
+    const bytes = new TextEncoder().encode(serialized);
+    const digest = await crypto.subtle.digest("SHA-256", bytes);
+
+    return Array.from(
+      new Uint8Array(digest),
+      byte => byte.toString(16).padStart(2, "0")
+    ).join("");
+  }
+
   async function readSyncPayload() {
     try {
       const metaResult =
@@ -887,16 +915,27 @@
         };
       }
 
-      const keys =
-        Array.from(
-          {
-            length:
-              chunkCount
-          },
-          (_, index) =>
-            SYNC_CHUNK_PREFIX +
-            index
-        );
+      const generation =
+        typeof meta.generation === "string"
+          ? meta.generation
+          : "";
+
+      if (
+        generation &&
+        (!/^[A-Za-z0-9_-]{1,100}$/.test(generation) ||
+         typeof meta.checksum !== "string")
+      ) {
+        return { status: "error", payload: null };
+      }
+
+      const chunkPrefix = generation
+        ? SYNC_CHUNK_PREFIX + generation + "_"
+        : SYNC_CHUNK_PREFIX;
+
+      const keys = Array.from(
+        { length: chunkCount },
+        (_, index) => chunkPrefix + index
+      );
 
       const stored =
         await chrome.storage.sync.get(
@@ -946,6 +985,14 @@
         };
       }
 
+      if (
+        generation &&
+        await snapshotHash(serialized) !== meta.checksum
+      ) {
+        console.warn("Grab-Or-Not detected an inconsistent sync snapshot.");
+        return { status: "error", payload: null };
+      }
+
       const parsed =
         JSON.parse(
           serialized
@@ -980,6 +1027,9 @@
         status:
           "ok",
 
+        generation:
+          generation,
+
         payload: {
           version:
             SYNC_PAYLOAD_VERSION,
@@ -990,6 +1040,8 @@
               meta.updatedAt ||
               0
             ),
+
+          reset: parsed.reset === true,
 
           presets:
             normalizePresets(
@@ -1018,105 +1070,140 @@
     }
   }
 
-  async function writeSyncPayload(
+  let syncWriteQueue = Promise.resolve();
+
+  function writeSyncPayload(
     presets,
     activePresetId,
-    updatedAt =
-      Date.now()
+    updatedAt = Date.now(),
+    isReset = false
   ) {
+    const next = syncWriteQueue.then(() =>
+      performSyncWritePayload(
+        presets,
+        activePresetId,
+        updatedAt,
+        isReset
+      )
+    );
+
+    syncWriteQueue = next.then(
+      () => undefined,
+      () => undefined
+    );
+
+    return next;
+  }
+
+  async function performSyncWritePayload(
+    presets,
+    activePresetId,
+    updatedAt = Date.now(),
+    isReset = false
+  ) {
+    syncWriteDepth += 1;
+
     try {
-      const payload =
-        buildSyncPayload(
-          presets,
-          activePresetId,
-          updatedAt
-        );
+      const payload = buildSyncPayload(
+        presets,
+        activePresetId,
+        updatedAt,
+        isReset
+      );
 
-      const chunks =
-        splitSyncPayload(
-          payload
-        );
+      const serialized = JSON.stringify(payload);
+      const chunks = splitSyncPayload(payload);
+      const generation =
+        Date.now().toString(36) + "-" + crypto.randomUUID();
 
-      const previous =
-        await chrome.storage.sync.get(
-          SYNC_META_KEY
-        );
+      const prefix = SYNC_CHUNK_PREFIX + generation + "_";
+      const previous = await chrome.storage.sync.get(null);
+      const previousMeta = previous[SYNC_META_KEY];
 
-      const previousCount =
-        Number(
-          previous[
-            SYNC_META_KEY
-          ]?.chunkCount ||
-          0
-        );
+      const staged = {};
 
-      const values = {
-        [SYNC_META_KEY]: {
-          version:
-            SYNC_PAYLOAD_VERSION,
+      chunks.forEach((chunk, index) => {
+        staged[prefix + index] = chunk;
+      });
 
-          updatedAt:
-            payload.updatedAt,
+      // Publish immutable chunks before changing the active pointer.
+      await chrome.storage.sync.set(staged);
 
-          chunkCount:
-            chunks.length
+      const verification = await chrome.storage.sync.get(
+        Object.keys(staged)
+      );
+
+      for (const [key, value] of Object.entries(staged)) {
+        if (verification[key] !== value) {
+          throw new Error("Chrome Sync did not store the full snapshot.");
         }
+      }
+
+      const metadata = {
+        version: SYNC_PAYLOAD_VERSION,
+        updatedAt: payload.updatedAt,
+        chunkCount: chunks.length,
+        generation,
+        checksum: await snapshotHash(serialized)
       };
 
-      chunks.forEach(
-        (
-          chunk,
-          index
-        ) => {
-          values[
-            SYNC_CHUNK_PREFIX +
-            index
-          ] =
-            chunk;
-        }
-      );
+      // This is the final commit pointer, never the first write.
+      await chrome.storage.sync.set({
+        [SYNC_META_KEY]: metadata
+      });
 
-      await chrome.storage.sync.set(
-        values
-      );
+      const committed = await chrome.storage.sync.get(SYNC_META_KEY);
 
       if (
-        previousCount >
-        chunks.length
+        committed[SYNC_META_KEY]?.generation !== generation
       ) {
-        const staleKeys =
-          [];
+        throw new Error("Chrome Sync snapshot commit was superseded.");
+      }
 
-        for (
-          let index =
-            chunks.length;
-          index <
-          previousCount;
-          index += 1
-        ) {
-          staleKeys.push(
-            SYNC_CHUNK_PREFIX +
-              index
-          );
+      // Retain the previous complete snapshot during propagation.
+      // Remove only older generations already present before this write.
+      const previousPrefix = previousMeta?.generation
+        ? SYNC_CHUNK_PREFIX + previousMeta.generation + "_"
+        : "";
+
+      const oldKeys = Object.keys(previous).filter(key => {
+        if (!key.startsWith(SYNC_CHUNK_PREFIX)) return false;
+
+        if (previousPrefix) {
+          return !key.startsWith(previousPrefix);
         }
 
-        if (
-          staleKeys.length
-        ) {
-          await chrome.storage.sync.remove(
-            staleKeys
+        return !/^clipnestNotionSyncChunkV1_\\d+$/.test(key);
+      });
+
+      if (oldKeys.length) {
+        try {
+          const latest = await chrome.storage.sync.get(SYNC_META_KEY);
+
+          if (latest[SYNC_META_KEY]?.generation === generation) {
+            await chrome.storage.sync.remove(oldKeys);
+          }
+        } catch (cleanupError) {
+          console.warn(
+            "Could not clean up older Notion sync snapshots:",
+            cleanupError
           );
         }
       }
 
+      await setSyncWarning("");
       return true;
     } catch (error) {
-      console.warn(
-        "Grab-Or-Not could not sync Notion presets:",
-        error
+      console.warn("Grab-Or-Not could not sync Notion presets:", error);
+
+      await setSyncWarning(
+        "Notion presets are saved locally, but Chrome Sync failed. " +
+        "Export a settings backup and check synchronization."
       );
 
       return false;
+    } finally {
+      syncWriteDepth -= 1;
     }
   }
 
@@ -1262,7 +1349,8 @@
           if (
             hasLocal &&
             localUpdatedAt >
-              syncUpdatedAt
+              syncUpdatedAt &&
+            result.payload.reset !== true
           ) {
             const state =
               await writeLocalState(
@@ -1337,7 +1425,7 @@
               )
           );
 
-        if (!relevant) {
+        if (!relevant || syncWriteDepth > 0) {
           return;
         }
 
@@ -1363,7 +1451,8 @@
     await writeSyncPayload(
       state.presets,
       state.activePresetId,
-      updatedAt
+      updatedAt,
+      state.presets.length === 0
     );
 
     return state;
@@ -1374,6 +1463,14 @@
 
     const syncResult =
       await readSyncPayload();
+
+    if (syncResult.status === "error") {
+      await setSyncWarning(
+        "Could not read Chrome Sync presets. Local data is preserved."
+      );
+    } else if (syncResult.status === "ok") {
+      await setSyncWarning("");
+    }
 
     const data =
       await chrome.storage.local.get([
@@ -1426,7 +1523,8 @@
       if (
         hasLocalPresets &&
         localUpdatedAt >
-          syncUpdatedAt
+          syncUpdatedAt &&
+        syncResult.payload.reset !== true
       ) {
         const state =
           await writeLocalState(
@@ -1448,19 +1546,32 @@
         return state;
       }
 
-      return writeLocalState(
+      const restored = await writeLocalState(
         syncResult.payload.presets,
         syncResult.payload.activePresetId,
         syncUpdatedAt
       );
+
+      // Upgrade a complete legacy snapshot without changing its presets.
+      if (!syncResult.generation) {
+        await writeSyncPayload(
+          restored.presets,
+          restored.activePresetId,
+          syncUpdatedAt,
+          syncResult.payload.reset === true
+        );
+      }
+
+      return restored;
     }
 
     if (
       hasLocalPresets
     ) {
       if (
-        syncResult.status ===
-          "error"
+        syncResult.status === "error" ||
+        (normalizePresets(data[PRESETS_KEY]).length === 0 &&
+         localUpdatedAt === 0)
       ) {
         return writeLocalState(
           data[
@@ -1502,10 +1613,7 @@
         );
       }
 
-      return writeState(
-        [],
-        ""
-      );
+      return writeLocalState([], "", 0);
     }
 
     const preset =
@@ -1647,6 +1755,10 @@
       throw new Error(
         "That Notion preset no longer exists."
       );
+    }
+
+    if (state.activePresetId === target.id) {
+      return target;
     }
 
     await writeState(
@@ -1923,8 +2035,35 @@
     );
   }
 
+  async function resetSyncedPresets() {
+    const resetAt = Date.now();
+
+    if (!await writeSyncPayload([], "", resetAt, true)) {
+      throw new Error(
+        "Chrome Sync could not save the reset. Settings were not cleared."
+      );
+    }
+
+    const verified = await readSyncPayload();
+
+    if (verified.status !== "ok" ||
+        verified.payload.updatedAt !== resetAt ||
+        verified.payload.presets.length !== 0 ||
+        verified.payload.reset !== true) {
+      throw new Error("Could not verify the Chrome Sync reset.");
+    }
+
+    return resetAt;
+  }
+
+  async function finishReset(resetAt) {
+    return writeLocalState([], "", resetAt);
+  }
+
   globalThis.ClipNestNotionStore =
     Object.freeze({
+      resetSyncedPresets,
+      finishReset,
       migrateLegacy,
       listPresets,
       replacePresets,

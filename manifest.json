@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Grab-Or-Not",
-  "version": "2.0.93",
+  "version": "2.0.96",
   "description": "Web Clipper for Obsidian & Notion",
   "minimum_chrome_version": "122",
   "permissions": [

@@ -3,7 +3,7 @@
 
 - Repository: `TheCuriousProcrastinator/grab-or-not`; local working branch: `main`.
 - Version data below is read from the **Git index** (the files staged for commit).
-- Source `manifest.json`: version `2.0.93`.
+- Source `manifest.json`: version `2.0.96`.
 - GitHub publication: Published GitHub release `v2.0.84` (reported by GitHub API). Other distribution channels are **unverified**.
 - This section does **not** establish local build success, manual QA, App Store/Chrome Web Store approval, notarization, live website deployment, or release-asset integrity.
 - The narrative below maintains architecture, decisions, issues and test evidence. Its older status and version claims are **historical** unless explicitly reconciled with this section.
@@ -287,6 +287,24 @@ Do not make a production release before successful browser testing unless explic
 ### Documentation
 
 - `README.md`
+
+## 2.0.96 validated development state: Chrome Sync reliability
+
+Validated locally on November 16, 2026.
+
+- Repository: `TheCuriousProcrastinator/grab-or-not`
+- Branch: `main`
+- Manifest version: `2.0.96`
+- Browser validation on two Macs: PASS, confirmed by user
+- 2.0.94: preserve local presets during incomplete sync; add sync warnings and explicit settings reset
+- 2.0.95: immutable sync snapshot generations, checksum verification, and chunk-before-metadata publishing
+- 2.0.96: serialize local sync writes, avoid redundant writes when selecting the already-active preset, and refresh open preset interfaces when local storage changes
+- Verified workflow: create, edit and delete presets with cross-device propagation
+- Chrome Sync delivery timing remains variable and is not guaranteed to be immediate
+- Concurrent changes on separate Macs are not merged at the individual preset level
+- Normal clipping, existing settings identifiers, extension identity and Obsidian behavior must remain preserved
+- Latest published release remains `v2.0.84`
+- No automatic GitHub Actions; no production release requested
 
 ## 2.0.93 validated development state: Grab-Or-Not
 

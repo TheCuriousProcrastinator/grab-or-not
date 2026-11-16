@@ -12,6 +12,8 @@ const SETTINGS_EXPORT_VERSION =
 const NOTION_FIELD_MEMORY_KEY =
   "clipnestNotionFieldMemoryV1";
 
+const NOTION_SYNC_WARNING_KEY = "clipnestNotionSyncWarningV1";
+
 let notionOptionsReady =
   false;
 
@@ -45,6 +47,39 @@ chrome.storage.onChanged.addListener(
     void handleNotionOptionsIntent();
   }
 );
+
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  if (
+    areaName !== "local" ||
+    !notionOptionsReady ||
+    !changes.notionPresets
+  ) {
+    return;
+  }
+
+  const change = changes.notionPresets;
+
+  if (
+    JSON.stringify(change.oldValue) ===
+    JSON.stringify(change.newValue)
+  ) {
+    return;
+  }
+
+  void (async () => {
+    await refreshNotionPresetList();
+
+    const settings = await chrome.storage.local.get(
+      "quickClipNotionPresetId"
+    );
+
+    await refreshQuickClipPresetList(
+      settings.quickClipNotionPresetId || ""
+    );
+  })().catch(error => {
+    console.warn("Could not refresh Notion settings:", error);
+  });
+});
 
 async function init() {
   for (const id of [
@@ -84,7 +119,10 @@ async function init() {
     "exportSettings",
     "importSettings",
     "importSettingsFile",
-    "settingsBackupStatus"
+    "settingsBackupStatus",
+    "notionSyncStatus",
+    "resetAllSettings",
+    "resetSettingsStatus"
   ]) {
     els[id] =
       document.getElementById(id);
@@ -146,6 +184,10 @@ async function init() {
       void importSettingsBackup();
     }
   );
+
+  els.resetAllSettings.addEventListener("click", () => {
+    void resetAllExtensionSettings();
+  });
 
   els.refreshNotionWorkspaces.addEventListener(
     "click",
@@ -315,6 +357,7 @@ async function init() {
   await refreshVaultList();
   await refreshNotionPresetList();
   await loadSettings();
+  await refreshNotionSyncStatus();
 
   setupNotionFieldEditor();
 
@@ -414,6 +457,57 @@ async function disconnectNotion() {
         String(error),
       "error"
     );
+  }
+}
+
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === "local" && changes[NOTION_SYNC_WARNING_KEY]) {
+    void refreshNotionSyncStatus();
+  }
+});
+
+async function refreshNotionSyncStatus() {
+  if (!els.notionSyncStatus) return;
+  const data = await chrome.storage.local.get(NOTION_SYNC_WARNING_KEY);
+  const message = data[NOTION_SYNC_WARNING_KEY] || "";
+  showStatus(els.notionSyncStatus, message, message ? "error" : "");
+}
+
+async function resetAllExtensionSettings() {
+  const confirmed = window.confirm(
+    "Reset ALL Grab-Or-Not settings and Notion presets?\\n\\n" +
+    "This also resets synced preset configuration. " +
+    "Existing Notion pages and Obsidian notes will not be deleted."
+  );
+
+  if (!confirmed) return;
+
+  els.resetAllSettings.disabled = true;
+
+  try {
+    const resetAt = await ClipNestNotionStore.resetSyncedPresets();
+
+    await ClipNestVaultStore.clearStoredVaultHandles();
+
+    if (await ClipNestNotionSession.hasPermission()) {
+      await ClipNestNotionSession.revokePermission();
+      if (await ClipNestNotionSession.hasPermission()) {
+        throw new Error("Chrome did not revoke the Notion permission.");
+      }
+    }
+
+    await chrome.storage.session.clear();
+    await chrome.storage.local.clear();
+    await ClipNestNotionStore.finishReset(resetAt);
+
+    window.location.reload();
+  } catch (error) {
+    showStatus(
+      els.resetSettingsStatus,
+      error?.message || String(error),
+      "error"
+    );
+    els.resetAllSettings.disabled = false;
   }
 }
 

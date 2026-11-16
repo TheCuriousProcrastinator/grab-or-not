@@ -720,8 +720,24 @@
     await clearCaches();
   }
 
+  async function clearStoredVaultHandles() {
+    const db = await openDb();
+    try {
+      await new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, "readwrite");
+        tx.objectStore(STORE_NAME).clear();
+        tx.oncomplete = resolve;
+        tx.onerror = () => reject(tx.error);
+        tx.onabort = () => reject(tx.error);
+      });
+    } finally {
+      db.close();
+    }
+  }
+
   globalThis.ClipNestVaultStore =
     Object.freeze({
+      clearStoredVaultHandles,
       migrateLegacy,
       listVaults,
       getActiveVaultId,
